@@ -1,0 +1,25 @@
+// C++ code
+//
+#include <Servo.h> // inclui biblioteca
+
+Servo myServo; //cria um serveo
+
+//declaração de variáveis
+
+#define pot 0
+#define portS 9
+
+int val; 
+
+void setup() {
+  myServo.attach(portS); //indicação da porta do servo
+}
+
+void loop() {
+  myServo.write(90); // o servo inicia com o angulo de 90°
+  
+  val = analogRead(pot); //lê o valor da porta do potenciometro e armazena em val
+  val = map(val, 0 ,1023, 0, 180); //mapeia o valor da variável; se o potenciometro for 0 >> servo tem angulo 0°; se o potenciometro for o máximo (1023) >> o servo gira 180°
+  myServo.write(val); //rotaciona o servo em relação ao valor da variavel
+  delay(15); //deley pra dar tempo de girar 
+}
