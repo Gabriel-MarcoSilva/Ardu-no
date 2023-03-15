@@ -1,0 +1,20 @@
+#define led1 4
+#define btn 3
+
+bool clickBtn = false;
+
+void setup(){
+    pinMode(led1, OUTPUT);
+    pinMode(btn, INPUT);
+}
+
+void loop(){
+    if(digitalRead(btn) == HIGH){ //se o btn foi pressionado então o led liga
+        if(digitalRead(led1) != HIGH){ //verifica se o led tá ligado
+            digitalWrite(led1, HIGH);
+        }
+        else{
+            digitalWrite(led1, LOW);
+        }
+    }
+}
