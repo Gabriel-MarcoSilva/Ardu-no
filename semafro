@@ -1,0 +1,39 @@
+// C++ code
+//
+
+#define led1 13
+#define led2 12
+#define led3 11
+
+void setup()
+{
+  pinMode(led1, OUTPUT);
+  pinMode(led2, OUTPUT);
+  pinMode(led3, OUTPUT);
+
+}
+
+void vermelho(int tmp){
+	digitalWrite(led1, HIGH);
+ 	delay(tmp * 1000); // Wait for tmp * 1000 millisecond(s)
+  	digitalWrite(led1, LOW);
+}
+
+void verde(int tmp){
+ 	digitalWrite(led3, HIGH);
+  	delay(tmp * 1000); // Wait for tmp * 1000 millisecond(s)
+    digitalWrite(led3, LOW);
+}
+
+void amarelo(int tmp){
+  digitalWrite(led2, HIGH);
+  delay(tmp * 1000); // Wait for tmp * 1000 millisecond(s)
+  digitalWrite(led2, LOW);
+}
+
+void loop()
+{
+  vermelho(5);
+  verde(3);
+  amarelo(2);
+}
