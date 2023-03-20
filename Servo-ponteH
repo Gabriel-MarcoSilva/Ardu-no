@@ -1,0 +1,106 @@
+/* A finalidade do código no futuro, não é a partir da variação do potenciometro/angulação que o motor irá pra frente ou pra tras
+mas o presente código é sobre, é mais pra aprender a usar o servo com o motor, visto que quando variar a angulação o motor deverá diminuir sua rotação
+
+no futuro deve ser colocado o sensor de linha pra rgular o servo
+
+*/
+
+
+#include <Servo.h> // inclui biblioteca
+
+Servo myServo; //cria um serveo
+
+//declaração de variáveis
+    //servo
+#define pot 0
+#define portS 9
+    //ponteH
+#define velm1 3
+#define m1a 2
+#define m1b 4
+#define tmp 500
+
+int val; 
+int vel = 255;
+bool saiu = false;
+
+void motorFrente(){
+    analogWrite(velm1, vel);
+    digitalWrite(m1a, HIGH);
+    digitalWrite(m1b, LOW);
+    Serial.println("motor 1");
+}
+
+void motorFrenteCurva(){
+    analogWrite(velm1, vel);
+    digitalWrite(m1a, HIGH);
+    digitalWrite(m1b, LOW);
+    Serial.println("entrando na curva");
+}
+
+void motorTras(){
+    analogWrite(velm1, vel);
+    digitalWrite(m1a, LOW);
+    digitalWrite(m1b, HIGH);
+    Serial.println("motor 2");
+}
+
+void seguranca(){
+    //parada de segurança do motor
+    Serial.println("break");
+    analogWrite(velm1, 0);
+    digitalWrite(m1a, LOW);
+    digitalWrite(m1b, LOW);
+    delay(100);
+}
+
+void setup(){
+
+    Serial.begin(9600); //inicia o monitor serial
+
+    myServo.attach(portS); //indicação da porta do servo
+    myServo.write(90); // o servo inicia com o angulo de 90°
+
+    pinMode(velm1, OUTPUT);
+    pinMode(m1a, OUTPUT);
+    pinMode(m1b, OUTPUT);
+
+    analogWrite(velm1, 0);
+    digitalWrite(m1a, LOW);
+    digitalWrite(m1b, LOW);
+}
+
+void loop(){
+  
+    val = analogRead(pot); //lê o valor da porta do potenciometro e armazena em val
+    val = map(val, 0 ,1023, 0, 180); //mapeia o valor da variável; se o potenciometro for 0 >> servo tem angulo 0°; se o potenciometro for o máximo (1023) >> o servo gira 180°
+    myServo.write(val); //rotaciona o servo em relação ao valor da variavel
+    delay(15); //deley pra dar tempo de girar 
+
+    Serial.println(val); //imprime na tela o valor de val
+
+    if(val > 60 && val < 120){ //ir pra frente
+        
+        vel = 255;
+        if (!saiu){
+            seguranca();
+        }
+        saiu = true;
+        motorFrente();
+    }else{ //reduçaõ da rotação
+        if (saiu){
+            seguranca();
+        }
+        saiu = false;
+        vel = 127;
+        motorFrenteCurva();
+    }
+    /*else { //ré condição pra ré:  quando todos os sensores forem pretos
+        if (saiu){
+            seguranca();
+        }
+        saiu = false;
+        motorTras();
+    }*/
+    delay(tmp);
+}
